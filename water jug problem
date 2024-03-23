@@ -1,0 +1,53 @@
+from collections import deque
+
+def pour(jug1, jug2, jug1_capacity, jug2_capacity):
+    # Fill jug2
+    if jug2 == 0:
+        return 0, jug2_capacity
+    # Empty jug1
+    elif jug1 == jug1_capacity:
+        return 0, jug2
+    # Transfer water from jug2 to jug1
+    elif jug1 < jug1_capacity and jug2 > 0:
+        space_in_jug1 = jug1_capacity - jug1
+        if jug2 <= space_in_jug1:
+            return jug1 + jug2, 0
+        else:
+            return jug1_capacity, jug2 - space_in_jug1
+    else:
+        return jug1, jug2
+
+def bfs(start_state, jug1_capacity, jug2_capacity, target):
+    visited = set()
+    queue = deque([(0, 0)])
+
+    while queue:
+        jug1, jug2 = queue.popleft()
+        if jug1 == target:
+            return jug1, jug2
+        visited.add((jug1, jug2))
+
+        for new_state in [(jug1_capacity, jug2), (0, jug2), (jug1, jug2_capacity), (jug1, 0),
+                          pour(jug1, jug2, jug1_capacity, jug2_capacity), pour(jug2, jug1, jug2_capacity, jug1_capacity)]:
+            if new_state not in visited:
+                queue.append(new_state)
+                visited.add(new_state)
+
+    return None
+
+def water_jug_problem(jug1_capacity, jug2_capacity, target):
+    if target > max(jug1_capacity, jug2_capacity):
+        return None
+    start_state = (0, 0)
+    solution = bfs(start_state, jug1_capacity, jug2_capacity, target)
+    if solution:
+        return solution
+    else:
+        return "No solution exists"
+
+if __name__ == "__main__":
+    jug1_capacity = 7
+    jug2_capacity = 4
+    target = 3
+    solution = water_jug_problem(jug1_capacity, jug2_capacity, target)
+    print("Solution:", solution)
