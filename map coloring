@@ -1,0 +1,53 @@
+def is_safe(node, color, graph, color_assignment):
+    for neighbor in graph[node]:
+        if color_assignment[neighbor] == color:
+            return False
+    return True
+
+def map_coloring(graph, colors, node, num_nodes, color_assignment):
+    if node == num_nodes:
+        return True
+
+    for color in colors:
+        if is_safe(node, color, graph, color_assignment):
+            color_assignment[node] = color
+            if map_coloring(graph, colors, node + 1, num_nodes, color_assignment):
+                return True
+            color_assignment[node] = None
+
+    return False
+
+def print_solution(color_assignment):
+    for node, color in enumerate(color_assignment):
+        print(f"Node {node}: Color {color}")
+
+if __name__ == "__main__":
+    # Define the graph (adjacency list representation)
+    graph = {
+        0: [1, 2],
+        1: [0, 2, 3],
+        2: [0, 1, 3],
+        3: [1, 2]
+    }
+
+    # Define the available colors
+    colors = ["Red", "Green", "Blue"]
+
+    # Number of nodes in the graph
+    num_nodes = len(graph)
+
+    # Initialize color assignment for each node
+    color_assignment = [None] * num_nodes
+
+    # Perform map coloring
+    if map_coloring(graph, colors, 0, num_nodes, color_assignment):
+        print("Map coloring successful:")
+        print_solution(color_assignment)
+    else:
+        print("No solution exists.")
+output:
+Map coloring successful:
+Node 0: Color Red
+Node 1: Color Green
+Node 2: Color Blue
+Node 3: Color Red
