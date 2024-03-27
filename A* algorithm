@@ -1,0 +1,28 @@
+class Graph:
+    # Implementation of the Graph class continues here as it is, without any changes
+
+# Example usage:
+
+# Define the adjacency list
+adjacency_list = {
+    'A': [('B', 1), ('C', 3), ('D', 7)],
+    'B': [('D', 5)],
+    'C': [('D', 12)],
+    'D': []  # Assuming D has no outgoing edges
+}
+
+# Create a Graph object
+graph = Graph(adjacency_list)
+
+# Define start and stop nodes
+start_node = 'A'
+stop_node = 'D'
+
+# Run A* algorithm to find the shortest path
+shortest_path = graph.a_star_algorithm(start_node, stop_node)
+
+# Output the result
+if shortest_path:
+    print("Shortest Path:", shortest_path)
+else:
+    print("Path does not exist!")
